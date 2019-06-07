@@ -19,14 +19,26 @@ based on article: https://commandcenter.blogspot.com/2014/01/self-referential-fu
 
 Entry point:
 ```go
+package main
+
+import (
+	"../pkg/accounts"
+	"../pkg/billing"
+	"../pkg/subscriptions"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("## variant1:")
+	fmt.Println("## Variant1:")
 	variant1()
 	fmt.Println()
 
-	fmt.Println("## variant2:")
+	fmt.Println("## Variant2:")
 	variant2()
+	fmt.Println()
+
+	fmt.Println("## Variant3:")
+	variant3()
 }
 
 
@@ -55,18 +67,40 @@ func variant2() {
 
 	foo.Process(23)
 }
+
+func variant3() {
+	foo := subscriptions.New()
+
+	srvAccounts := accounts.New(8)
+	srvBilling := billing.New()
+
+	ac := subscriptions.SrvAccounts(srvAccounts)
+	bl := subscriptions.SrvBilling(srvBilling)
+
+	foo.Option(ac)
+	foo.Option(bl)
+
+	foo.Process(23)
+}
+
 ```
 
 
 Output result:
 ```
-## variant1:
+## Variant1:
 --------- a.Prop 11111
 8
 --------- a.Prop 22222
 23
 
-## variant2:
+## Variant2:
+--------- a.Prop 11111
+8
+--------- a.Prop 22222
+23
+
+## Variant3:
 --------- a.Prop 11111
 8
 --------- a.Prop 22222
