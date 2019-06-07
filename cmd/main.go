@@ -4,16 +4,21 @@ import (
 	"../pkg/accounts"
 	"../pkg/billing"
 	"../pkg/subscriptions"
+	"fmt"
 )
 
 func main() {
+	fmt.Println("## variant1:")
 	variant1()
+	fmt.Println()
+
+	fmt.Println("## variant2:")
 	variant2()
 }
 
 
 func variant1() {
-	foo := subscriptions.Foo{}
+	foo := subscriptions.New()
 
 	srvAccounts := accounts.New(8)
 
@@ -25,7 +30,7 @@ func variant1() {
 }
 
 func variant2() {
-	foo := subscriptions.Foo{}
+	foo := subscriptions.New()
 
 	srvAccounts := accounts.New(8)
 	srvBilling := billing.New()
