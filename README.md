@@ -1,7 +1,5 @@
 # go-service-options
 
-based on article: https://commandcenter.blogspot.com/2014/01/self-referential-functions-and-design.html?m=1
-
 
 ```
 .
@@ -29,81 +27,74 @@ import (
 )
 
 func main() {
-	fmt.Println("## Variant1:")
+	fmt.Println("Variant_1:")
 	variant1()
-	fmt.Println()
 
-	fmt.Println("## Variant2:")
+	fmt.Println("Variant_2:")
 	variant2()
-	fmt.Println()
 
-	fmt.Println("## Variant3:")
+	fmt.Println("Variant_3:")
 	variant3()
 }
 
 
 func variant1() {
-	foo := subscriptions.New()
+	subs := subscriptions.New()
 
-	srvAccounts := accounts.New(8)
+	srvAccounts := accounts.New(111)
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
+	ac := subscriptions.BindAccounts(srvAccounts)
 
-	foo.Option(ac)
+	subs.AddOptions(ac)
 
-	foo.Process(23)
+	subs.Process(222)
 }
 
 func variant2() {
-	foo := subscriptions.New()
+	subs := subscriptions.New()
 
-	srvAccounts := accounts.New(8)
+	srvAccounts := accounts.New(333)
 	srvBilling := billing.New()
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
-	bl := subscriptions.SrvBilling(srvBilling)
+	ac := subscriptions.BindAccounts(srvAccounts)
+	bl := subscriptions.BindBilling(srvBilling)
 
-	foo.Option(ac, bl)
+	subs.AddOptions(ac, bl)
 
-	foo.Process(23)
+	subs.Process(444)
 }
 
 func variant3() {
-	foo := subscriptions.New()
+	subs := subscriptions.New()
 
-	srvAccounts := accounts.New(8)
+	srvAccounts := accounts.New(555)
 	srvBilling := billing.New()
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
-	bl := subscriptions.SrvBilling(srvBilling)
+	ac := subscriptions.BindAccounts(srvAccounts)
+	bl := subscriptions.BindBilling(srvBilling)
 
-	foo.Option(ac)
-	foo.Option(bl)
+	subs.AddOptions(ac)
+	subs.AddOptions(bl)
 
-	foo.Process(23)
+	subs.Process(777)
 }
+
 
 ```
 
 
 Output result:
 ```
-## Variant1:
---------- a.Prop 11111
-8
---------- a.Prop 22222
-23
+Variant_1:
+        a.Prop (before): 111
+        a.Prop (after): 222
 
-## Variant2:
---------- a.Prop 11111
-8
---------- a.Prop 22222
-23
+Variant_2:
+        a.Prop (before): 333
+        a.Prop (after): 444
 
-## Variant3:
---------- a.Prop 11111
-8
---------- a.Prop 22222
-23
+Variant_3:
+        a.Prop (before): 555
+        a.Prop (after): 777
 
 ```

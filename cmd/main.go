@@ -1,63 +1,61 @@
 package main
 
 import (
-	"../pkg/accounts"
 	"../pkg/billing"
 	"../pkg/subscriptions"
+	"../pkg/accounts"
 	"fmt"
 )
 
 func main() {
-	fmt.Println("## Variant1:")
+	fmt.Println("Variant_1:")
 	variant1()
-	fmt.Println()
 
-	fmt.Println("## Variant2:")
+	fmt.Println("Variant_2:")
 	variant2()
-	fmt.Println()
 
-	fmt.Println("## Variant3:")
+	fmt.Println("Variant_3:")
 	variant3()
 }
 
 
 func variant1() {
-	foo := subscriptions.New()
+	accs := accounts.New()
 
-	srvAccounts := accounts.New(8)
+	srvSubscriptions := subscriptions.New(111)
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
+	sbs := accounts.BindSubscriptions(srvSubscriptions)
 
-	foo.Option(ac)
+	accs.AddOptions(sbs)
 
-	foo.Process(23)
+	accs.Process(222)
 }
 
 func variant2() {
-	foo := subscriptions.New()
+	accs := accounts.New()
 
-	srvAccounts := accounts.New(8)
+	srvSubscriptions := subscriptions.New(333)
 	srvBilling := billing.New()
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
-	bl := subscriptions.SrvBilling(srvBilling)
+	sbs := accounts.BindSubscriptions(srvSubscriptions)
+	bl := accounts.BindBilling(srvBilling)
 
-	foo.Option(ac, bl)
+	accs.AddOptions(sbs, bl)
 
-	foo.Process(23)
+	accs.Process(444)
 }
 
 func variant3() {
-	foo := subscriptions.New()
+	accs := accounts.New()
 
-	srvAccounts := accounts.New(8)
+	srvSubscriptions := subscriptions.New(555)
 	srvBilling := billing.New()
 
-	ac := subscriptions.SrvAccounts(srvAccounts)
-	bl := subscriptions.SrvBilling(srvBilling)
+	sbs := accounts.BindSubscriptions(srvSubscriptions)
+	bl := accounts.BindBilling(srvBilling)
 
-	foo.Option(ac)
-	foo.Option(bl)
+	accs.AddOptions(sbs)
+	accs.AddOptions(bl)
 
-	foo.Process(23)
+	accs.Process(777)
 }
