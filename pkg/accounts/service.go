@@ -61,11 +61,17 @@ func BindSubscriptions(v subscriptions.Client) option {
 	return subscriptionsOption{Client: v}
 }
 
+type billingOption struct {
+	billing.Client
+}
+
+func (b billingOption) apply(f *accs) {
+	f.srvBilling = b.Client
+}
+
 // BindBilling - bind property: billing service
-func BindBilling(v billing.Client) Option {
-	return func(f *accs) {
-		f.srvBilling = v
-	}
+func BindBilling(v billing.Client) option {
+	return billingOption{Client: v}
 }
 
 // Public methods ------------------
