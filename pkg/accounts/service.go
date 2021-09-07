@@ -48,11 +48,17 @@ func Verbosity(v int) option {
 	return verbosityOption(v)
 }
 
+type subscriptionsOption struct {
+	subscriptions.Client
+}
+
+func (v subscriptionsOption) apply(f *accs) {
+	f.srvSubscriptions = v.Client
+}
+
 // BindSubscriptions - bind property: subscription service
-func BindSubscriptions(v subscriptions.Client) Option {
-	return func(f *accs) {
-		f.srvSubscriptions = v
-	}
+func BindSubscriptions(v subscriptions.Client) option {
+	return subscriptionsOption{Client: v}
 }
 
 // BindBilling - bind property: billing service
