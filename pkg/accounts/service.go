@@ -1,8 +1,8 @@
 package accounts
 
 import (
-	"../billing"
-	"../subscriptions"
+	"go-service-options/pkg/billing"
+	"go-service-options/pkg/subscriptions"
 )
 
 // Init ------------------
