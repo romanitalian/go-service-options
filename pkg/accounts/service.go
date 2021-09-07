@@ -14,7 +14,7 @@ func New() Client {
 
 // Client is interface for account struct
 type Client interface {
-	AddOptions(...Option)
+	AddOptions(...option)
 	Process(int64)
 }
 
@@ -27,11 +27,13 @@ type accs struct {
 // Dependencies ------------------
 
 // Option self-referential function
-type Option func(*accs)
+type option interface {
+	apply(*accs)
+}
 
-func (f *accs) AddOptions(opts ...Option) {
+func (f *accs) AddOptions(opts ...option) {
 	for _, opt := range opts {
-		opt(f)
+		opt.apply(f)
 	}
 }
 
