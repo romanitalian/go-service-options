@@ -37,11 +37,15 @@ func (f *accs) AddOptions(opts ...option) {
 	}
 }
 
+type verbosityOption int
+
+func (v verbosityOption) apply(f *accs) {
+	f.verbosity = int(v)
+}
+
 // Verbosity set verbosity value
-func Verbosity(v int) Option {
-	return func(f *accs) {
-		f.verbosity = v
-	}
+func Verbosity(v int) option {
+	return verbosityOption(v)
 }
 
 // BindSubscriptions - bind property: subscription service
