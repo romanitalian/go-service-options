@@ -1,10 +1,11 @@
 package main
 
 import (
-	"../pkg/billing"
-	"../pkg/subscriptions"
-	"../pkg/accounts"
 	"fmt"
+
+	"go-service-options/pkg/accounts"
+	"go-service-options/pkg/billing"
+	"go-service-options/pkg/subscriptions"
 )
 
 func main() {
