@@ -14,7 +14,7 @@ func New() Client {
 
 // Client is interface for account struct
 type Client interface {
-	AddOptions(...Option)
+	AddOptions(...option)
 	Process(int64)
 }
 
@@ -27,33 +27,51 @@ type accs struct {
 // Dependencies ------------------
 
 // Option self-referential function
-type Option func(*accs)
+type option interface {
+	apply(*accs)
+}
 
-func (f *accs) AddOptions(opts ...Option) {
+func (f *accs) AddOptions(opts ...option) {
 	for _, opt := range opts {
-		opt(f)
+		opt.apply(f)
 	}
+}
+
+type verbosityOption int
+
+func (v verbosityOption) apply(f *accs) {
+	f.verbosity = int(v)
 }
 
 // Verbosity set verbosity value
-func Verbosity(v int) Option {
-	return func(f *accs) {
-		f.verbosity = v
-	}
+func Verbosity(v int) option {
+	return verbosityOption(v)
+}
+
+type subscriptionsOption struct {
+	subscriptions.Client
+}
+
+func (v subscriptionsOption) apply(f *accs) {
+	f.srvSubscriptions = v.Client
 }
 
 // BindSubscriptions - bind property: subscription service
-func BindSubscriptions(v subscriptions.Client) Option {
-	return func(f *accs) {
-		f.srvSubscriptions = v
-	}
+func BindSubscriptions(v subscriptions.Client) option {
+	return subscriptionsOption{Client: v}
+}
+
+type billingOption struct {
+	billing.Client
+}
+
+func (b billingOption) apply(f *accs) {
+	f.srvBilling = b.Client
 }
 
 // BindBilling - bind property: billing service
-func BindBilling(v billing.Client) Option {
-	return func(f *accs) {
-		f.srvBilling = v
-	}
+func BindBilling(v billing.Client) option {
+	return billingOption{Client: v}
 }
 
 // Public methods ------------------
